@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import auth from "@/db/index";
+import auth from "@/db/auth";
 export default {
   name: "Login",
   data() {
@@ -45,14 +45,14 @@ export default {
     };
   },
   methods: {
-    submit: function() {
+     submit: async function() {
       if (this.email && this.password) {
-        try {
-          let user = auth.login(this.email, this.password);
-        } catch (error) {
-          this.message = error.message;
-          this.alert = true;
-        }
+      console.log(this.email)
+        //try {
+          const l = await auth.login(this.email, this.password)
+          if(l){
+          this.$router.replace('/events')}
+        
       }
     }
   }

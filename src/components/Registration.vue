@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import auth from "@/db/index";
+import auth from "@/db/auth";
 export default {
   name: "Registration",
   data() {
@@ -69,10 +69,10 @@ export default {
     };
   },
   methods: {
-    submit: function() {
+    submit: async function (){
       if (this.valid) {
         try {
-          auth.addUser(this.newUser);
+          await auth.addUser(this.newUser);
         } catch (error) {
           this.message = error.message;
           this.alert = true;

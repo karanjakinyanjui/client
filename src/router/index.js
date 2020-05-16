@@ -1,9 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import auth from "@/db/auth";
+
 import Registration from "../components/Registration.vue";
 import Login from "../components/Login.vue";
-import auth from "@/db/index";
+import ListEvents from "../components/ListEvents.vue";
 
 Vue.use(VueRouter);
 
@@ -11,7 +12,10 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: ListEvents,
+    meta: {
+      protected: true,
+    },
   },
   {
     path: "/login",
@@ -24,14 +28,14 @@ const routes = [
     component: Registration,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/events",
+    name: "ListEvents",
+    component: ListEvents,
+    meta: {
+      protected: true,
+    },
   },
+
 ];
 
 const router = new VueRouter({
@@ -43,7 +47,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((route) => route.meta.protected)) {
     if (!auth.getToken()) {
-      next({ name: "Login" });
+      next({ name: "Login", query: { redirect: from.path }});
     } else {
       next();
     }
@@ -55,7 +59,7 @@ router.beforeEach((to, from, next) => {
       next({ name: "Login" });
     } else {
       if (!auth.isStaff()) {
-        next({ name: "Forbidden" });
+        next({ name: "Home" });
       } else {
         next();
       }
