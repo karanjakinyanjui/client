@@ -3,7 +3,9 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/events">Events</router-link> | 
-      <a @click="logout">Logout</a>
+
+      <a @click="logout" v-if='loggedIn'>Logout</a>
+      <router-link to="/register" v-else>Register</router-link>
     </div>
     <v-container >
       <v-row>
@@ -51,8 +53,13 @@ export default {
   },
 
   data: () => ({
-    //
+
   }),
+  computed: {
+    loggedIn () {
+      return auth.getToken()
+    }
+  },
   methods: {
   logout() {
   auth.logout();

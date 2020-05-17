@@ -50,8 +50,12 @@ export default {
       console.log(this.email)
         //try {
           const l = await auth.login(this.email, this.password)
-          if(l){
-          this.$router.replace('/events')}
+          if(l.data.role === 'staff'){
+            this.$router.replace('/events')
+          }
+          else if(l.data.role === 'student'){
+            this.$router.replace('/')
+          }
         
       }
     }

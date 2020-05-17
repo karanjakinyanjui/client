@@ -1,6 +1,6 @@
 
 <template>
-  <v-data-table :headers="headers" :items="events" sort-by="calories" class="elevation-1">
+  <v-data-table :headers="headers" :items="filtered" sort-by="" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Event List</v-toolbar-title>
@@ -12,8 +12,16 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
+      Event List
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
 
             <v-card-text>
               <v-container>
@@ -71,6 +79,7 @@ export default {
 
 
   data: () => ({
+  search: '',
     dialog: false,
     headers: [
       {
@@ -86,7 +95,90 @@ export default {
       { text: "Duration", value: "duration" },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    events: [],
+    events: [{
+name: "Principles of Programming",
+topic: "Electrical Engineering",
+price: 1100,
+location: "Auditorium",
+time: "19/01/2019",
+duration: "5 hr"
+},{
+name: "Software Engineering",
+topic: "Computer Science",
+price: 2000,
+location: "Auditorium",
+time: "12/12/2020",
+duration: "8 hr"
+},
+{
+name: "Artificial Intelligence",
+topic: "Computer Science",
+price: 900,
+location: "Auditorium",
+time: "25/08/2016",
+duration: "3 hr"
+},{
+name: "Atomic, Nuclear, and Particle Physics",
+topic: "Physics",
+price: 500,
+location: "Auditorium",
+time: "12/11/2015",
+duration: "2 hr"
+},
+{
+name: "Accounting Ethics",
+topic: "Business",
+price: 300,
+location: "Auditorium",
+time: "07/07/2020",
+duration: "1 hr"
+},{
+name: "Combinatorics",
+topic: "maths",
+price: 1000,
+location: "Auditorium",
+time: "29/12/2017",
+duration: "4 hr"
+},
+{
+name: "Dynamical systems and differential equations",
+topic: "maths",
+price: 1500,
+location: "Auditorium",
+time: "15/10/2019",
+duration: "6 hr"
+},{
+name: "African American Entrepreneurship",
+topic: "Business Management",
+price: 400,
+location: "Auditorium",
+time: "22/12/2018",
+duration: "2 hr"
+},
+{
+name: "OEM and ODM Development",
+topic: "IT Management",
+price: 1200,
+location: "Auditorium",
+time: "18/08/2012",
+duration: "4 hr"
+},{
+name: "Chapter 4 Cyber Security ",
+topic: "IT Management",
+price: 500,
+location: "Auditorium",
+time: "20/04/2020",
+duration: "3 hr"
+},
+{
+name: "Introduction to NoSQL Database ",
+topic: "Computer Science",
+price: 450,
+location: "Auditorium",
+time: "14/02/2020",
+duration: "2 hr"
+}
+],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -118,6 +210,9 @@ export default {
         return JSON.parse(localStorage.getItem("userDetails"))["role"] == "staff";
       }
       return false;
+    },
+    filtered(){
+    return this.events.filter(i => i.topic.includes(this.search))
     }
   },
 
@@ -133,7 +228,7 @@ export default {
 
   methods: {
     async initialize() {
-      this.events = await events.getEvents()
+      //this.events = await events.getEvents()
     },
 
     editItem(item) {
